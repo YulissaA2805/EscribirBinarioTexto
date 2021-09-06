@@ -11,6 +11,24 @@ namespace EscribirBinarioTexto
         private static Regex regexLabel = new Regex(@"(^\s?;$)|(Ciclo)");
         private static Regex regexReserved = new Regex(@"(^HALT)|(^DEFAI)|(^DEFI)");
 
+        private static int d = 4;
+
+        class Variable
+        {
+            public string Nombre { get; set; }
+
+            public int Direccion { get; set; }
+
+            public string Tipo { get; set; }
+
+            public string numeroElementos { get; set; }
+
+            public override string ToString()
+            {
+                return "Nombre: " + Nombre + "   Direccion: " + Direccion + "   Tipo: " + Tipo + "   Numero de elementos: " + numeroElementos;
+            }
+        }
+
         private static Dictionary<string, int> instrucciones = new Dictionary<string, int>()
         {
             { "NOP", 1 },
@@ -50,7 +68,7 @@ namespace EscribirBinarioTexto
             { "PUSHAS", 3 },
             { "PUSHKI", 5 },
             { "PUSHKD", 3 },
-            { "PUSHKS", 0 }, //n+2
+            { "PUSHKS", 2 }, //n+2
 
             { "POPI", 3 },
             { "POPD", 3 },
@@ -67,7 +85,7 @@ namespace EscribirBinarioTexto
             { "READAD", 3 },
             { "READAS", 3 },
 
-            { "PRTM", 0 }, //n+2
+            { "PRTM", 2 }, //n+2
             { "PRTI", 3 },
             { "PRTD", 3 },
             { "PRTS", 3 },
@@ -76,6 +94,16 @@ namespace EscribirBinarioTexto
             { "PRTAS", 3 },
 
             { "HALT", 1 },
+        };
+
+        private static Dictionary<int, string> tipoVariable = new Dictionary<int, string>()
+        {
+            {0, "int"},
+            {1, "double"},
+            {2, "string"},
+            {10, "array int"},
+            {11, "array double"},
+            {12, "array string"},
         };
 
         private static Dictionary<string, int> etiquetas = new Dictionary<string, int>()
@@ -92,12 +120,14 @@ namespace EscribirBinarioTexto
 
         private static Dictionary<int, string> segmento_codigo = new Dictionary<int, string>();
 
+        private static List<Variable> tabla_var = new List<Variable>();
+
         //@"^\s?(;)$"
         //"([Ciclo:]|[;])"
         static void Main(string[] args)
         {
             // Lee el archivo
-            string path = @"C:/Users/93764/Desktop/pruebas bin/prueba texto 2.txt";
+            string path = @"C:/Users/ludmi/Downloads/prueba-texto-2.txt";
 
             string result = Path.GetFileName(path);
             Console.WriteLine("Nombre del archivo: '{0}'", result);
@@ -132,6 +162,8 @@ namespace EscribirBinarioTexto
             var lineas = source.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
 
             int tam_seg_cod = 0;
+
+            int dir = 0;
 
             // calcular la direccion de memoria para las etiquetas (por ahora)
             for (var i = 0; i < lineas.Length; i++)
@@ -173,6 +205,10 @@ namespace EscribirBinarioTexto
                                 if(palabras_linea.Length == 3)
                                 {
                                     variables.Add(palabras_linea[1], i);//guarda la variable y su dirección (linea de código)
+
+                                    //tabla var
+                                    tabla_var.Add(new Variable() { Nombre = palabras_linea[1], Direccion = dir, Tipo = tipoVariable[10], numeroElementos = palabras_linea[2] });
+                                    dir += Int32.Parse(palabras_linea[2]) * d;
                                 }
                                 else//si no son tres elementos la instrucción está mal escrita
                                 {
@@ -185,6 +221,82 @@ namespace EscribirBinarioTexto
                                 if (palabras_linea.Length == 2)
                                 {
                                     variables.Add(palabras_linea[1], i);//guarda la variable y su dirección (linea de código)
+
+                                    //tabla var
+                                    tabla_var.Add(new Variable() { Nombre = palabras_linea[1], Direccion = dir, Tipo = tipoVariable[0], numeroElementos = "1" });
+                                    dir += d;
+                                }
+                                else//si no son tres elementos la instrucción está mal escrita
+                                {
+                                    Console.WriteLine($"Error: '{linea}' linea: {numLinea}.");
+                                }
+                            }
+                            else if (nueva_palabra.Equals("DEFAD"))
+                            {
+                                var palabras_linea = linea.Split(' ', ',');
+                                //foreach (string p in palabras_linea)
+                                //{
+                                //    Console.WriteLine(p + "\n");
+                                //}
+                                if (palabras_linea.Length == 3)
+                                {
+                                    variables.Add(palabras_linea[1], i);//guarda la variable y su dirección (linea de código)
+
+                                    //tabla var
+                                    tabla_var.Add(new Variable() { Nombre = palabras_linea[1], Direccion = dir, Tipo = tipoVariable[11], numeroElementos = palabras_linea[2] });
+                                    dir += Int32.Parse(palabras_linea[2]) * d;
+                                }
+                                else//si no son tres elementos la instrucción está mal escrita
+                                {
+                                    Console.WriteLine($"Error: '{linea}' linea: {numLinea}.");
+                                }
+                            }
+                            else if (nueva_palabra.Equals("DEFD"))
+                            {
+                                var palabras_linea = linea.Split(' ');
+                                if (palabras_linea.Length == 2)
+                                {
+                                    variables.Add(palabras_linea[1], i);//guarda la variable y su dirección (linea de código)
+
+                                    //tabla var
+                                    tabla_var.Add(new Variable() { Nombre = palabras_linea[1], Direccion = dir, Tipo = tipoVariable[1], numeroElementos = "1" });
+                                    dir += d;
+                                }
+                                else//si no son tres elementos la instrucción está mal escrita
+                                {
+                                    Console.WriteLine($"Error: '{linea}' linea: {numLinea}.");
+                                }
+                            }
+                            else if (nueva_palabra.Equals("DEFAS"))
+                            {
+                                var palabras_linea = linea.Split(' ', ',');
+                                //foreach (string p in palabras_linea)
+                                //{
+                                //    Console.WriteLine(p + "\n");
+                                //}
+                                if (palabras_linea.Length == 3)
+                                {
+                                    variables.Add(palabras_linea[1], i);//guarda la variable y su dirección (linea de código)
+
+                                    //tabla var
+                                    tabla_var.Add(new Variable() { Nombre = palabras_linea[1], Direccion = dir, Tipo = tipoVariable[12], numeroElementos = palabras_linea[2] });
+                                    dir += Int32.Parse(palabras_linea[2]) * d;
+                                }
+                                else//si no son tres elementos la instrucción está mal escrita
+                                {
+                                    Console.WriteLine($"Error: '{linea}' linea: {numLinea}.");
+                                }
+                            }
+                            else if (nueva_palabra.Equals("DEFS"))
+                            {
+                                var palabras_linea = linea.Split(' ');
+                                if (palabras_linea.Length == 2)
+                                {
+                                    variables.Add(palabras_linea[1], i);//guarda la variable y su dirección (linea de código)
+
+                                    //tabla var
+                                    tabla_var.Add(new Variable() { Nombre = palabras_linea[1], Direccion = dir, Tipo = tipoVariable[2], numeroElementos = "1" });
+                                    dir += d;
                                 }
                                 else//si no son tres elementos la instrucción está mal escrita
                                 {
@@ -195,6 +307,7 @@ namespace EscribirBinarioTexto
                             {
                                 segmento_codigo.Add(tam_seg_cod - instrucciones[nueva_palabra], nueva_palabra);
                             }
+
                         }
                         else if (etiquetas_def.ContainsKey(nueva_palabra))//si la palabra es una etiqueta ya definida
                         {
@@ -300,6 +413,11 @@ namespace EscribirBinarioTexto
             foreach (var sc in segmento_codigo)
             {
                 Console.WriteLine(sc);
+            }
+            Console.WriteLine("\nTABLA DE VARIABLES");
+            foreach (var tv in tabla_var)
+            {
+                Console.WriteLine(tv);
             }
 
 
