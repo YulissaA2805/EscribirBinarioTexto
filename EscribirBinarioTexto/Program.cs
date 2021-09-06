@@ -90,6 +90,8 @@ namespace EscribirBinarioTexto
 
         private static Dictionary<string, int> etiquetas_refer = new Dictionary<string, int>();
 
+        private static Dictionary<int, string> segmento_codigo = new Dictionary<int, string>();
+
         //@"^\s?(;)$"
         //"([Ciclo:]|[;])"
         static void Main(string[] args)
@@ -188,6 +190,10 @@ namespace EscribirBinarioTexto
                                 {
                                     Console.WriteLine($"Error: '{linea}' linea: {numLinea}.");
                                 }
+                            }
+                            else
+                            {
+                                segmento_codigo.Add(tam_seg_cod - instrucciones[nueva_palabra], nueva_palabra);
                             }
                         }
                         else if (etiquetas_def.ContainsKey(nueva_palabra))//si la palabra es una etiqueta ya definida
@@ -289,6 +295,11 @@ namespace EscribirBinarioTexto
             foreach (var e2 in etiquetas_refer)
             {
                 Console.WriteLine(e2);
+            }
+            Console.WriteLine("\nSEGMENTO DE CODIGO");
+            foreach (var sc in segmento_codigo)
+            {
+                Console.WriteLine(sc);
             }
 
 
