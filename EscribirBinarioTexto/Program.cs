@@ -127,7 +127,7 @@ namespace EscribirBinarioTexto
         static void Main(string[] args)
         {
             // Lee el archivo
-            string path = @"C:/Users/ludmi/Downloads/prueba-texto-2.txt";
+            string path = @"C:/Users/93764/Desktop/pruebas bin/prueba texto 2.txt";//C:\Users\93764\Desktop\pruebas bin
 
             string result = Path.GetFileName(path);
             Console.WriteLine("Nombre del archivo: '{0}'", result);
@@ -340,59 +340,59 @@ namespace EscribirBinarioTexto
                     
                 }
 
-                try
-                {
-                    if (String.IsNullOrEmpty(linea))
-                    {
-                        continue;
-                    }
-                    else if (IsLabel(linea))
-                    {
-                        // analiza la etiqueta y guarda la direccion de memoria actual
-                        var coincide = regexLabel.Match(linea);
+                //try
+                //{
+                //    if (String.IsNullOrEmpty(linea))
+                //    {
+                //        continue;
+                //    }
+                //    else if (IsLabel(linea))
+                //    {
+                //        // analiza la etiqueta y guarda la direccion de memoria actual
+                //        var coincide = regexLabel.Match(linea);
 
-                        //
-                        var label = coincide.Groups[1].Value;
+                //        //
+                //        var label = coincide.Groups[1].Value;
 
-                        //
-                        if (labels.ContainsKey(label))
-                            throw new Exception($"Etiqueta duplicada '{label}' encontrada en la linea {numLinea}.");
+                //        //
+                //        if (labels.ContainsKey(label))
+                //            throw new Exception($"Etiqueta duplicada '{label}' encontrada en la linea {numLinea}.");
 
-                        labels.Add(label, pointer);
-                    }
-                    else if (IsReserved(linea))
-                    {
-                        // analiza la etiqueta y guarda la direccion de memoria actual
-                        var coincide = regexReserved.Match(linea);
+                //        labels.Add(label, pointer);
+                //    }
+                //    else if (IsReserved(linea))
+                //    {
+                //        // analiza la etiqueta y guarda la direccion de memoria actual
+                //        var coincide = regexReserved.Match(linea);
                         
-                        //
-                        var reserv = coincide.Groups[1].Value;
+                //        //
+                //        var reserv = coincide.Groups[1].Value;
 
-                        //
-                        if (labels.ContainsKey(reserv))
-                            throw new Exception($"Etiqueta duplicada '{reserv}' encontrada en la linea {numLinea}.");
+                //        //
+                //        if (labels.ContainsKey(reserv))
+                //            throw new Exception($"Etiqueta duplicada '{reserv}' encontrada en la linea {numLinea}.");
 
-                        labels.Add(reserv, pointer);
-                    }
-                    else
-                    {
-                        //en este caso es porque no es una etiqueta
-                        throw new Exception($"Error: '{linea}' linea: {numLinea}.");
-                    }
-                    /*variables
-                    palabras reservadas (instrucciones) 
-                    constantes (string, int, double)
-                    caracteres especiales (, : ;)
-                    */
-                }
-                catch (Exception)
-                {
-                    Console.WriteLine($"Error: '{linea}' linea: {numLinea}.");
-                }
+                //        labels.Add(reserv, pointer);
+                //    }
+                //    else
+                //    {
+                //        //en este caso es porque no es una etiqueta
+                //        throw new Exception($"Error: '{linea}' linea: {numLinea}.");
+                //    }
+                //    /*variables
+                //    palabras reservadas (instrucciones) 
+                //    constantes (string, int, double)
+                //    caracteres especiales (, : ;)
+                //    */
+                //}
+                //catch (Exception)
+                //{
+                //    Console.WriteLine($"Error: '{linea}' linea: {numLinea}.");
+                //}
 
             }
 
-            Console.WriteLine("Tamaño segmento de código: "+ tam_seg_cod);
+            
 
             Console.WriteLine("\nVARIABLES Y DIRECCIÓN (LÍNEA DEL CÓDIGO)");
             foreach (var v in variables)
@@ -414,6 +414,7 @@ namespace EscribirBinarioTexto
             {
                 Console.WriteLine(sc);
             }
+            Console.WriteLine("Tamaño segmento de código: " + tam_seg_cod);
             Console.WriteLine("\nTABLA DE VARIABLES");
             foreach (var tv in tabla_var)
             {
