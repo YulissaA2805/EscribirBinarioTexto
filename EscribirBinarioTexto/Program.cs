@@ -127,7 +127,7 @@ namespace EscribirBinarioTexto
         static void Main(string[] args)
         {
             // Lee el archivo
-            string path = @"C:/Users/93764/Desktop/pruebas bin/prueba texto 2.txt";//C:\Users\93764\Desktop\pruebas bin
+            string path = @"C:/Users/93764/Desktop/pruebas bin/prueba texto 2.txt";//La ruta cambia dependiendo de la computadora
 
             string result = Path.GetFileName(path);
             Console.WriteLine("Nombre del archivo: '{0}'", result);
