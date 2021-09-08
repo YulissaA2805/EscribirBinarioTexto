@@ -127,7 +127,7 @@ namespace EscribirBinarioTexto
         static void Main(string[] args)
         {
             // Lee el archivo
-            string path = @"C:/Users/93764/Desktop/pruebas bin/prueba texto 2.txt";//La ruta cambia dependiendo de la computadora
+            string path = @"D:/OneDrive - Instituto Educativo del Noroeste, A.C/Docs/CETYS/Universidad/7mo/Compiladores/Programas/ensamblador/prueba-texto-2.ASE";//La ruta cambia dependiendo de la computadora
 
             string result = Path.GetFileName(path);
             Console.WriteLine("Nombre del archivo: '{0}'", result);
@@ -149,6 +149,7 @@ namespace EscribirBinarioTexto
             //Console.WriteLine();
 
             var rom = AssembleSource(a);
+
         }
 
         public static byte[] AssembleSource(string source)
@@ -410,11 +411,22 @@ namespace EscribirBinarioTexto
                 Console.WriteLine(e2);
             }
             Console.WriteLine("\nSEGMENTO DE CODIGO");
+            string segdecod = "xd";
+            string acum= " ";
             foreach (var sc in segmento_codigo)
             {
                 Console.WriteLine(sc);
+                segdecod = sc.ToString();
+                acum = acum + segdecod + "\n";
             }
             Console.WriteLine("Tamaño segmento de código: " + tam_seg_cod);
+            string[] lines = { "iccstn", tam_seg_cod.ToString(), acum };
+            string docPath = @"D:/OneDrive - Instituto Educativo del Noroeste, A.C/Docs/CETYS/Universidad/7mo/Compiladores/Programas/ensamblador";
+            using (StreamWriter outputFile = new StreamWriter(Path.Combine(docPath, "archivo.stn")))
+            {
+                foreach (string line in lines)
+                    outputFile.WriteLine(line);
+            }
             Console.WriteLine("\nTABLA DE VARIABLES");
             foreach (var tv in tabla_var)
             {

@@ -1,0 +1,12 @@
+iccstn
+34
+ [0, PUSHKI]
+[5, POPI]
+[8, PUSHI]
+[12, READAI]
+[15, PRTAI]
+[18, INC]
+[21, PUSHI]
+[24, PUSHKI]
+[30, JMPT]
+
